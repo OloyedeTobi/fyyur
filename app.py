@@ -371,25 +371,25 @@ def create_artist_submission():
   form = ArtistForm(request.form)
   if form.validate():
       add = request.form.get  
-      # try:
-      new_artist = Artist(name=add('name'),
-                        city=add('city'),
-                        state=add('state'),
-                        phone=add('phone'),
-                        genres=request.form.getlist('genres'),
-                        website=add('website_link'),
-                        facebook_link=add('facebook_link'),
-                        seeking_venue=form.seeking_venue.data,
-                        seeking_description=add('seeking_description')
-                        )
-      db.session.add(new_artist)
-      db.session.commit()
-      flash('Artist ' + request.form['name'] + ' was successfully listed!')
-      # except:
-      #     db.session.rollback()
-      #     flash('An error occurred. Artist ' + ' ' + add('name') + ' could not be listed.')
-      # finally:
-      #   db.session.close()
+      try:
+        new_artist = Artist(name=add('name'),
+                          city=add('city'),
+                          state=add('state'),
+                          phone=add('phone'),
+                          genres=request.form.getlist('genres'),
+                          website=add('website_link'),
+                          facebook_link=add('facebook_link'),
+                          seeking_venue=form.seeking_venue.data,
+                          seeking_description=add('seeking_description')
+                          )
+        db.session.add(new_artist)
+        db.session.commit()
+        flash('Artist ' + request.form['name'] + ' was successfully listed!')
+      except:
+          db.session.rollback()
+          flash('An error occurred. Artist ' + ' ' + add('name') + ' could not be listed.')
+      finally:
+        db.session.close()
   else:
       print(form.errors)
       flash('An error occurred with the form. Check form and try again')
